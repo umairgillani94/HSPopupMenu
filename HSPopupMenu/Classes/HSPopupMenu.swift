@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - HSMenu
 
-public struct HSMenu {
+public class HSMenu {
     var icon: UIImage?
     var title: String?
     var isSelected : Bool?
