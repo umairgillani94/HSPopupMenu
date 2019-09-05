@@ -13,10 +13,12 @@ import Foundation
 public struct HSMenu {
     var icon: UIImage?
     var title: String?
+    var isSelected : Bool?
     
-    public init(icon: UIImage?, title: String?) {
+    public init(icon: UIImage?, title: String?, isSelected : Bool?) {
         self.icon = icon
         self.title = title
+        self.isSelected = isSelected
     }
 }
 
@@ -169,6 +171,15 @@ extension HSPopupMenu {
             self.removeFromSuperview()
         }
     }
+    
+    public func selectAt (index : Int) {
+        if index < self.menuArray.count {
+            self.menuArray.forEach {
+                $0.isSelected = false
+            }
+            self.menuArray[index].isSelected = true
+        }
+    }
 }
 
 
@@ -192,11 +203,18 @@ extension HSPopupMenu: UITableViewDelegate, UITableViewDataSource {
         cell.titleLabel.textColor = menuTextColor
         cell.line.isHidden = (indexPath.row < menuArray.count - 1) ? false : true
         cell.line.backgroundColor = menuLineColor
+        
+        if menu.isSelected == true {
+            cell.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        } else {
+            cell.backgroundColor = UIColor.clear
+        }
+        
         return cell
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        self.selectAt(index: indexPath.row)
         self.dismiss()
         self.delegate?.popupMenu(self, didSelectAt: indexPath.row)
     }
